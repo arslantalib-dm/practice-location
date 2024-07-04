@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ResponseStatus;
+use App\Http\Requests\FacilityLocationRequest;
+use App\Http\Requests\FacilityRequest;
 use App\Http\Requests\StatusFacilityLocationRequest;
 use App\Http\Requests\StatusFacilityRequest;
-use App\Http\Requests\StoreFacilityLocationRequest;
-use App\Http\Requests\StoreFacilityRequest;
-use App\Http\Requests\UpdateFacilityRequest;
 use App\Models\Facility;
 use App\Models\FacilityLocation;
 use App\Service\PracticeLocationService;
@@ -33,7 +32,7 @@ class PracticeLocationController extends Controller
         }
     }
 
-    public function storeFacility(StoreFacilityRequest $request)
+    public function storeFacility(FacilityRequest $request)
     {
         $data = $request->validated();
         try {
@@ -54,7 +53,7 @@ class PracticeLocationController extends Controller
         }
     }
 
-    public function updateFacility(UpdateFacilityRequest $request)
+    public function updateFacility(FacilityRequest $request)
     {
         $data = $request->validated();
         try {
@@ -94,14 +93,14 @@ class PracticeLocationController extends Controller
         $perPage = $request->get("per_page", 10);
         $page = $request->get("per_page", 1);
         try {
-            $list = FacilityLocation::where('facility_id', $facilityId)->notMain()->notDeleted()->active()->paginate($perPage, ['*'], 'page', $page);
+            $list = FacilityLocation::where('facility_id', $facilityId)->notMain()->notDeleted()->active()->paginate($perPage);
             return response()->success($list, "success", ResponseStatus::SUCCESS);
         } catch (\Exception $th) {
             return response()->error($th->getMessage(), ResponseStatus::INTERNAL_SERVER_ERROR);
         }
     }
 
-    public function addLocation(StoreFacilityLocationRequest $request)
+    public function addLocation(FacilityLocationRequest $request)
     {
         $data = $request->validated();
         try {

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreFacilityRequest extends FormRequest
+class FacilityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,11 @@ class StoreFacilityRequest extends FormRequest
     public function rules()
     {
         return [
+            "id" => "nullable|integer|exists:facilities,id",
             "name" => "required|string",
             "sh_name" => "required|string",
             "pdf_type" => "required|in:citimed,optimum", // select one value
-
-            "location.id" => "nullable|integer",
+            "location.id" => "nullable|integer|exists:facility_locations,id",
             "location.name" => "nullable|string",
             "location.address" => "nullable|string",
             "location.city" => "nullable|string",
@@ -42,8 +42,7 @@ class StoreFacilityRequest extends FormRequest
             "location.fax" => "nullable|string",
             "location.is_main" => "nullable|boolean",
             "location.same_as_provider" => "nullable|boolean",
-
-            "location.billing.id" => "nullable|integer",
+            "location.billing.id" => "nullable|integer|exists:facility_billings,id",
             "location.billing.provider_name" => "nullable|string",
             "location.billing.address" => "nullable|string",
             "location.billing.city" => "nullable|string",

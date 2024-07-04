@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreFacilityLocationRequest extends FormRequest
+class FacilityLocationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -49,7 +49,6 @@ class StoreFacilityLocationRequest extends FormRequest
             "timings.*.day_id" => "required|integer",
             "timings.*.start_time" => "required|string",
             "timings.*.end_time" => "required|string",
-
             "time_zone" => "required|array",
             "time_zone.time_zone" => "required|numeric",
             "time_zone.time_zone_string" => "required|string",

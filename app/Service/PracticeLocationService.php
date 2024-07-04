@@ -74,6 +74,10 @@ class PracticeLocationService
         $billing = $location['billing'] ?? null;
         unset($location['billing']);
 
+        if (!$data['id']) {
+            throw new \Exception('Not Found', ResponseStatus::NOT_FOUND);
+        }
+
         $facility = $this->facilityRepository->update($data['id'], [
             "name" => $data["name"],
             "qualifier" => $data["sh_name"],
