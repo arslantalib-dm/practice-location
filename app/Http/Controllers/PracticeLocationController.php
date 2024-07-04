@@ -26,7 +26,7 @@ class PracticeLocationController extends Controller
         $perPage = $request->get("per_page", 10);
         $page = $request->get("page", 1);
         try {
-            $list = Facility::notDeleted()->active()->paginate($perPage, ['*'], 'page', $page);
+            $list = Facility::notDeleted()->active()->paginate($perPage);
             return response()->success($list, "success", ResponseStatus::SUCCESS);
         } catch (\Exception $th) {
             return response()->error($th->getMessage(), ResponseStatus::INTERNAL_SERVER_ERROR);
