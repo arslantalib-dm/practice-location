@@ -26,8 +26,8 @@ class FacilityRequest extends FormRequest
         return [
             "id" => "nullable|integer|exists:facilities,id",
             "name" => "required|string",
-            "sh_name" => "required|string",
-            "pdf_type" => "required|in:citimed,optimum", // select one value
+            "qualifier" => "required|string",
+            "generate_document_using" => "required|in:citimed,optimum", // select one value
             "location.id" => "nullable|integer|exists:facility_locations,id",
             "location.name" => "nullable|string",
             "location.address" => "nullable|string",
@@ -55,9 +55,9 @@ class FacilityRequest extends FormRequest
             "location.billing.cell_no" => "nullable|string",
             "location.billing.fax" => "nullable|string",
             "location.billing.npi" => "nullable|string",
-            "location.billing.task_id_check" => "required|integer|in:1,2", // if task_id_check == 1 then tin required else ssn required
-            "location.billing.tin" => "required_if:location.billing.task_id_check,1|string|min:9|max:9", // Conditional requirement
-            "location.billing.ssn" => "required_if:location.billing.task_id_check,2|string|min:9|max:9", // Conditional requirement
+            "location.billing.tax_id_check" => "required|integer|in:1,2", // if task_id_check == 1 then tin required else ssn required
+            "location.billing.tin" => "nullable|required_if:location.billing.tax_id_check,1|integer|min:000000000|max:999999999", // Conditional requirement
+            "location.billing.ssn" => "nullable|required_if:location.billing.tax_id_check,2|integer|min:000000000|max:999999999", // Conditional requirement
             "location.billing.dean" => "nullable|string",
             "location.billing.dol" => "nullable|string",
         ];

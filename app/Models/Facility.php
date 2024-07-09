@@ -43,4 +43,9 @@ class Facility extends Model
     {
         return $query->whereNull('deleted_at');
     }
+
+    public function location()
+    {
+        return $this->hasMany(FacilityLocation::class);
+    }
 }

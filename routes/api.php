@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\PlaceServiceController;
 use App\Http\Controllers\PracticeLocationController;
+use App\Http\Controllers\RegionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(["prefix" => "practice"], function () {
-    Route::get("/", [PracticeLocationController::class, 'index']);
+    Route::post("/", [PracticeLocationController::class, 'index']);
     Route::post("/add", [PracticeLocationController::class, 'storeFacility']);
     Route::get("/{id}", [PracticeLocationController::class, 'findFacility']);
     Route::post("/update", [PracticeLocationController::class, 'updateFacility']);
@@ -34,4 +36,8 @@ Route::group(["prefix" => "practice"], function () {
 });
 
 Route::post('file-upload', [FileUploadController::class, 'upload']);
+Route::get('signnature-files/{id}/{type}', [FileUploadController::class, 'getSignatureFile']);
 Route::delete('delete-file/{id}', [FileUploadController::class, 'deleteFile']);
+
+Route::get('regions', [RegionController::class, 'index']);
+Route::get('place-of-service', [PlaceServiceController::class, 'index']);

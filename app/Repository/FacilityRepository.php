@@ -11,7 +11,9 @@ class FacilityRepository implements FacilityRepositoryInterface
     }
 
     public function update($id, $data) {
-        return Facility::where('id', $id)->update($data);
+        $facility = $this->find($id);
+        $facility->update($data);
+        return $facility;
     }
 
     public function find($id) {

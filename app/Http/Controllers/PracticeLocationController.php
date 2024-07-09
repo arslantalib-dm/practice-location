@@ -24,8 +24,20 @@ class PracticeLocationController extends Controller
     {
         $perPage = $request->get("per_page", 10);
         $page = $request->get("page", 1);
+        $filter = $request->get("filter", null);
         try {
-            $list = Facility::notDeleted()->active()->paginate($perPage);
+            $query = Facility::with(['location' => function ($query) {
+                $query->main()->notDeleted();
+            }])->notDeleted();
+            if ($filter && isset($filter['name'])) {
+                $query = $query->where('name', 'like', '%' . $filter['name'] . '%');
+            }
+            if ($filter && isset($filter['phone'])) {
+                $query = $query->whereHas('location', function ($query) use ($filter) {
+                    $query->where('phone', $filter['phone']);
+                });
+            }
+            $list = $query->orderBy('name', 'ASC')->paginate($perPage);
             return response()->success($list, "success", ResponseStatus::SUCCESS);
         } catch (\Exception $th) {
             return response()->error($th->getMessage(), ResponseStatus::INTERNAL_SERVER_ERROR);
@@ -36,8 +48,8 @@ class PracticeLocationController extends Controller
     {
         $data = $request->validated();
         try {
-            $this->practiceLocationService->storeFacility($data);
-            return response()->success(null, "success", ResponseStatus::CREATED);
+            $facility = $this->practiceLocationService->storeFacility($data);
+            return response()->success($facility, "success", ResponseStatus::CREATED);
         } catch (\Exception $th) {
             return response()->error($th->getMessage(), ResponseStatus::INTERNAL_SERVER_ERROR);
         }
@@ -57,8 +69,8 @@ class PracticeLocationController extends Controller
     {
         $data = $request->validated();
         try {
-            $this->practiceLocationService->updateFacility($data);
-            return response()->success(null, "success", ResponseStatus::CREATED);
+            $facility = $this->practiceLocationService->updateFacility($data);
+            return response()->success($facility, "success", ResponseStatus::CREATED);
         } catch (\Exception $th) {
             return response()->error($th->getMessage(), ResponseStatus::INTERNAL_SERVER_ERROR);
         }
@@ -68,7 +80,7 @@ class PracticeLocationController extends Controller
     {
         $data = $request->validated();
         try {
-            Facility::where('id', $data['id'])->update(['is_active'=> $data['is_active']]);
+            Facility::where('id', $data['id'])->update(['is_active' => $data['is_active']]);
             return response()->success(null, "status updated successfully", ResponseStatus::SUCCESS);
         } catch (\Exception $th) {
             return response()->error($th->getMessage(), ResponseStatus::INTERNAL_SERVER_ERROR);
@@ -93,7 +105,7 @@ class PracticeLocationController extends Controller
         $perPage = $request->get("per_page", 10);
         $page = $request->get("per_page", 1);
         try {
-            $list = FacilityLocation::where('facility_id', $facilityId)->notMain()->notDeleted()->active()->paginate($perPage);
+            $list = FacilityLocation::where('facility_id', $facilityId)->notMain()->notDeleted()->paginate($perPage);
             return response()->success($list, "success", ResponseStatus::SUCCESS);
         } catch (\Exception $th) {
             return response()->error($th->getMessage(), ResponseStatus::INTERNAL_SERVER_ERROR);
@@ -115,7 +127,7 @@ class PracticeLocationController extends Controller
     {
         $data = $request->validated();
         try {
-            FacilityLocation::where('id', $data['id'])->update(['is_active'=> $data['is_active']]);
+            FacilityLocation::where('id', $data['id'])->update(['is_active' => $data['is_active']]);
             return response()->success(null, "status updated successfully", ResponseStatus::CREATED);
         } catch (\Exception $th) {
             return response()->error($th->getMessage(), ResponseStatus::INTERNAL_SERVER_ERROR);

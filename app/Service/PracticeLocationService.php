@@ -38,8 +38,8 @@ class PracticeLocationService
 
         $facility = $this->facilityRepository->create([
             "name" => $data["name"],
-            "qualifier" => $data["sh_name"],
-            "generate_document_using" => $data['pdf_type'],
+            "qualifier" => $data["qualifier"],
+            "generate_document_using" => $data['generate_document_using'],
         ]);
 
         $facilityLocation = $this->storeLocation($location + [
@@ -49,6 +49,8 @@ class PracticeLocationService
         $this->storeBillig($billing + [
             "facility_location_id" => $facilityLocation->id
         ]);
+
+        return $facility;
     }
 
     public function findFacilityWithLocations($id)
@@ -80,8 +82,8 @@ class PracticeLocationService
 
         $facility = $this->facilityRepository->update($data['id'], [
             "name" => $data["name"],
-            "qualifier" => $data["sh_name"],
-            "generate_document_using" => $data['pdf_type'],
+            "qualifier" => $data["qualifier"],
+            "generate_document_using" => $data['generate_document_using'],
         ]);
 
         $facilityLocation = $this->storeLocation($location + [
@@ -91,6 +93,8 @@ class PracticeLocationService
         $this->storeBillig($billing + [
             "facility_location_id" => $facilityLocation->id
         ]);
+
+        return $facility;
     }
 
     public function addFacilityLocation($data)

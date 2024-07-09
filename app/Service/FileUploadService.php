@@ -32,8 +32,8 @@ class FileUploadService
         $fileName = pathinfo($originalName, PATHINFO_FILENAME);
         $fileName = $fileName . '_' . time() . '.' . $extension;
 
-        // Store file in 'storage/app/uploads' directory
-        $path = $file->storeAs('uploads', $fileName);
+        // Store file in 'storage/app/public/uploads' directory
+        $path = $file->storeAs('public/uploads', $fileName);
 
         $document = DocumentType::where('name', $data['doc_type'])->first();
 
