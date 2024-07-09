@@ -41,7 +41,7 @@ class FileUploadService
             'reference_id' => $data['object_id'],
             'file_title' => $data['file_title'],
             'file_name' => $fileName,
-            'file_link' => $path,
+            'file_link' => 'storage/uploads/' + $fileName,
             'ext' => $extension,
             'document_type_id' => $document->id,
         ]);
